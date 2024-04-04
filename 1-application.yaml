@@ -18,7 +18,7 @@ spec:
     path: environment/staging/apps-of-apps
   destination:
     server: https://kubernetes.default.svc 
-
+    namespace: staging # Must be specified otherwise defaults to argocd
   syncPolicy:
     automated:
       prune: true 

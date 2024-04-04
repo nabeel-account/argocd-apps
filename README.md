@@ -6,3 +6,6 @@
 An app-of-app application is an ArgoCD application that points to other ArgoCD applications that point to the kubernetes manifest. 
 
 An important feature of app-of-app is you only need to run this single ArgoCD application to deploy all other applications it references.
+
+2-helm-metrics-server.yaml
+Deploy a metrics server to retrieved cluster metrics
