@@ -1,0 +1,34 @@
+---
+######################################################
+# This is a single application deployment
+######################################################
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-application
+  namespace: argocd # nameapce of the argocd server
+
+  # If this Argo CD application is deleted, also delete it's corresponding resource in k8s cluster
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/nabeel-account/k8s-app.git
+    targetRevision: HEAD # Retrieves latest commit
+    path: nginx # Root directory
+  destination:
+    server: https://kubernetes.default.svc # Cluster to deploy. Default current.
+
+  # Automate the synching, prune (deletion) and selfhealing
+  syncPolicy:
+    automated:
+      prune: true # Delete resources if source code is deleted
+      selfHeal: true # Recreated resource if deleted manually 
+      allowEmpty: false # Disables deleting all applications during synching (down time)
+    syncOptions:
+      - Validate=true # Validates k8s manifest before synching. Enabled by default
+      - CreateNamespace=true # Create the namespaces if it doesn't exit
+      - PrunePropagationPolicy=foreground # Delete in the foreground
+      - PruneLast=true # Prume last after adding/updating manifest
